@@ -1,0 +1,10 @@
+*.project
+*.buildpath
+*.txt
+not_for_customers/
+images/
+HazoreaWrk/
+HazoreaOriginal/
+Email/
+DatePickerLibraries/
+.settings/
