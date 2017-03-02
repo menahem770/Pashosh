@@ -27,6 +27,7 @@
 				exit();
 			}else{
 				$_SESSION['WorkerNum'] = trim($result["WorkerNum"]);
+				$_SESSION['CardNumber'] = trim($result["CardNumber"]);
 				$_SESSION['WorkerName'] = trim($result["LastName"]." ".$result["FirstName"]);
 				$_SESSION['WFixID'] = $_GET['WFixID'];
 				$_SESSION['DepMail'] = $result["DepMail"];
@@ -37,6 +38,7 @@
 			}
 		}else{
 			$_SESSION['WorkerNum'] = $_GET['WorkerNum'];
+			$_SESSION['CardNumber'] = $_GET['CardNumber'];
 			$_SESSION['WorkerName'] = trim($_GET['WorkerName']);
 			$_SESSION['WFixID'] = $_GET['WFixID'];
 			$_SESSION['DepMail'] = $_GET['DepMail'];
@@ -75,23 +77,23 @@
 					include 'ShowWeek.php';?>
 				</table>
 			</td>
-			<td style="vertical-align:top;">
-				<?php
-					$note1 = "מספר שינויים המותר לביצוע בכל חודש: ";
-					$note2 = "מספר שינויים שכבר בוצעו בחודש זה: ";
-					$note3 = "מספר שינויים שכבר בוצעו בחודש קודם: ";
-					$thisMonth = $result2[0]['ManualUpdatesNumber'] / 1;
-					$lastMonth = $result2[0]['ManualUpdatesNumberPM'] / 1;
-				?>
-				<fieldset>
-					<legend style="text-align:right;font-weight:bold;color:red;">:שים לב</legend>
-					<div style="color:red; width:150px; text-align:right;">
-						<p> <?= $note1 ?> &nbsp; <?= $_SESSION['NumberOfManualChangesIOL'] ?> </p>
-						<p> <?= $note2 ?> &nbsp; <?= $thisMonth ?> </p>
-						<p> <?= $note3 ?> &nbsp; <?= $lastMonth ?> </p>
-					</div>
-				</fieldset>
-			</td>
+			<?php if($_SESSION['ini_array']['LimitNumberOfChanges']){
+						$note1 = "מספר שינויים המותר לביצוע בכל חודש: ";
+						$note2 = "מספר שינויים שכבר בוצעו בחודש זה: ";
+						$note3 = "מספר שינויים שכבר בוצעו בחודש קודם: ";
+						$thisMonth = $result2[0]['ManualUpdatesNumber'] / 1;
+						$lastMonth = $result2[0]['ManualUpdatesNumberPM'] / 1; ?>
+				<td style="vertical-align:top;">
+					<fieldset>
+						<legend style="text-align:right;font-weight:bold;color:red;">:שים לב</legend>
+						<div style="color:red; width:150px; text-align:right;">
+							<p> <?= $note1 ?> &nbsp; <?= $_SESSION['NumberOfManualChangesIOL'] ?> </p>
+							<p> <?= $note2 ?> &nbsp; <?= $thisMonth ?> </p>
+							<p> <?= $note3 ?> &nbsp; <?= $lastMonth ?> </p>
+						</div>
+					</fieldset>
+				</td>
+			<?php }?>
 		</tr>
 	</table>
 </body>

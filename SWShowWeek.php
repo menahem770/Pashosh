@@ -158,11 +158,11 @@
 					<table style="width:100%;">
 						<tr>
 							<td style="width:25%;">
-								<input name="lastW" type=button onClick="location.href='SWWeeks.php?weekInYearNum=<?=$prevWeekInYear?>&numWeekInPage=<?=$i+1?>&year=<?=$pYear?>&WorkerNum=<?=$_SESSION['WorkerNum']?>&WFixID=<?=$_SESSION['WFixID']?>&WorkerName=<?=$_SESSION['WorkerName']?>&DepMail=<?=$_SESSION['DepMail']?>&IncldInMadan=<?=$_SESSION['IncldInMadan']?>&IncldInTmhir=<?=$_SESSION['IncldInTmhir']?>&defDep=<?=$_SESSION['DefaultDep']?>&defJob=<?=$_SESSION['DefaultJob']?>'" value='שבוע קודם' <?=$lastWeek?> style="width:100%; height:25px; cursor: pointer;">
+								<input name="lastW" type=button onClick="location.href='SWWeeks.php?weekInYearNum=<?=$prevWeekInYear?>&numWeekInPage=<?=$i+1?>&year=<?=$pYear?>&WorkerNum=<?=$_SESSION['WorkerNum']?>&WFixID=<?=$_SESSION['WFixID']?>&WorkerName=<?=$_SESSION['WorkerName']?>&DepMail=<?=$_SESSION['DepMail']?>&IncldInMadan=<?=$_SESSION['IncldInMadan']?>&IncldInTmhir=<?=$_SESSION['IncldInTmhir']?>&defDep=<?=$_SESSION['DefaultDep']?>&defJob=<?=$_SESSION['DefaultJob']?>&CardNumber=<?=$_SESSION['CardNumber']?>'" value='שבוע קודם' <?=$lastWeek?> style="width:100%; height:25px; cursor: pointer;">
 							</td>
 							<td>&nbsp;</td>
 							<td style="width:25%;">
-								<input name="nextW" type=button onClick="location.href='SWWeeks.php?weekInYearNum=<?=$nextWeekInYear?>&numWeekInPage=<?=$i-1?>&year=<?=$nYear?>&WorkerNum=<?=$_SESSION['WorkerNum']?>&WFixID=<?=$_SESSION['WFixID']?>&WorkerName=<?=$_SESSION['WorkerName']?>&DepMail=<?=$_SESSION['DepMail']?>&IncldInMadan=<?=$_SESSION['IncldInMadan']?>&IncldInTmhir=<?=$_SESSION['IncldInTmhir']?>&defDep=<?=$_SESSION['DefaultDep']?>&defJob=<?=$_SESSION['DefaultJob']?>'" value='שבוע הבא' <?=$nextWeek?> style="width:100%; height:25px; align:right; cursor: pointer;">
+								<input name="nextW" type=button onClick="location.href='SWWeeks.php?weekInYearNum=<?=$nextWeekInYear?>&numWeekInPage=<?=$i-1?>&year=<?=$nYear?>&WorkerNum=<?=$_SESSION['WorkerNum']?>&WFixID=<?=$_SESSION['WFixID']?>&WorkerName=<?=$_SESSION['WorkerName']?>&DepMail=<?=$_SESSION['DepMail']?>&IncldInMadan=<?=$_SESSION['IncldInMadan']?>&IncldInTmhir=<?=$_SESSION['IncldInTmhir']?>&defDep=<?=$_SESSION['DefaultDep']?>&defJob=<?=$_SESSION['DefaultJob']?>&CardNumber=<?=$_SESSION['CardNumber']?>'" value='שבוע הבא' <?=$nextWeek?> style="width:100%; height:25px; align:right; cursor: pointer;">
 							</td>
 						</tr>
 					</table>

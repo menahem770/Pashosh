@@ -26,7 +26,7 @@
 			<?php if(isset($_SESSION['WorkerNum'])): ?>
 					<tr>
 						<td style="background-image: url('images/index_09.jpg'); height:42px;" class="side">
-							<div><a href="Weeks.php?WorkerNum=<?=$_SESSION['WorkerNum']?>&WFixID=<?=$_SESSION['WFixID']?>&WorkerName=<?=$_SESSION['WorkerName']?>&DepMail=<?=$_SESSION['DepMail']?>&IncldInMadan=<?=$_SESSION['IncldInMadan']?>&IncldInTmhir=<?=$_SESSION['IncldInTmhir']?>&defDep=<?=$_SESSION['DefaultDep']?>&defJob=<?=$_SESSION['DefaultJob']?>" class="side">ריכוז למספר שבועות </a></div>
+							<div><a href="Weeks.php?WorkerNum=<?=$_SESSION['WorkerNum']?>&WFixID=<?=$_SESSION['WFixID']?>&WorkerName=<?=$_SESSION['WorkerName']?>&DepMail=<?=$_SESSION['DepMail']?>&IncldInMadan=<?=$_SESSION['IncldInMadan']?>&IncldInTmhir=<?=$_SESSION['IncldInTmhir']?>&defDep=<?=$_SESSION['DefaultDep']?>&defJob=<?=$_SESSION['DefaultJob']?>&CardNumber=<?=$_SESSION['CardNumber']?>" class="side">ריכוז למספר שבועות </a></div>
 						</td>
 					</tr>
 			<?php endif; ?>

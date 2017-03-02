@@ -1,5 +1,4 @@
 <?php
-
 //-----------------------------------------------------------------------------------------------------------
 function BuildMissingList($currs,$dbh){
 
@@ -91,10 +90,9 @@ function BuildSugeiNochechutList($currs,$dbh){
 
 	$strSugeiNochechut1 = "";
 	$i = 0;
-    //$sql = "SELECT PrCalInd.PresentCd FROM PrCalInd WHERE (((PrCalInd.Active)=True) AND ((PrCalInd.ReportedPresent)=True) AND ((PrCalInd.WholeDayPresent)=False))";
-	$sql = "SELECT PrCalInd.PresentCd FROM PrCalInd WHERE (((PrCalInd.Active)=True) AND ((PrCalInd.ReportedPresent)=True) AND ((PrCalInd.WholeDayPresent)=False) AND ((PrCalInd.ToBrutto)=True) AND ((PrCalInd.IncludeInStandardBase)=True)) OR (((PrCalInd.CalcCode)=23)) ORDER BY IIf([CalcDes]='רגילה','A' & [CalcDes],IIf([CalcDes]='חופשה','B' & [CalcDes],IIf([CalcDes]='מחלה','C' & [CalcDes],IIf([CalcDes]='מילואים','D' & [CalcDes],[CalcDes]))))";
-	//$sql = "SELECT PrCalInd.PresentCd FROM PrCalInd WHERE (((PrCalInd.Active)=True) AND ((PrCalInd.ReportedPresent)=True) AND ((PrCalInd.WholeDayPresent)=False) AND ((PrCalInd.ToBrutto)=True) AND ((PrCalInd.IncludeInStandardBase)=True) AND ((PrCalInd.PartialMissing)=True)) OR (((PrCalInd.CalcCode)=23)) ORDER BY IIf([CalcDes]='רגילה','A' & [CalcDes],IIf([CalcDes]='חופשה','B' & [CalcDes],IIf([CalcDes]='מחלה','C' & [CalcDes],IIf([CalcDes]='מילואים','D' & [CalcDes],[CalcDes]))))";
-	
+
+    $sql = "SELECT PrCalInd.PresentCd FROM PrCalInd WHERE (((PrCalInd.Active)=True) AND ((PrCalInd.ReportedPresent)=True) AND ((PrCalInd.WholeDayPresent)=False) AND ((PrCalInd.ToBrutto)=True) AND ((PrCalInd.IncludeInStandardBase)=True) AND ((PrCalInd.PartialMissing)=True)) OR (((PrCalInd.CalcCode)=23)) OR (((PrCalInd.Active)=True) AND (Len(Trim(Chr(32) & [PrCalInd]![SpecialCal]))>0))   ORDER BY IIf([CalcDes]='רגילה','A' & [CalcDes],IIf([CalcDes]='חופשה','B' & [CalcDes],IIf([CalcDes]='מחלה','C' & [CalcDes],IIf([CalcDes]='מילואים','D' & [CalcDes], [CalcDes]))))";
+
 	$sth = $dbh->query($sql);
 	$result = $sth->fetchALL(PDO::FETCH_ASSOC);
 	if($currs == "ללא דווח"){
@@ -121,8 +119,8 @@ function BuildDepSList($currs,$dbh){
 
 	$strDprt1 = "";
 
-	$sql= "SELECT * FROM TDprtmnt WHERE DepGrop='1' order by TDprtmnt";
-	//$sql= "SELECT * FROM TDprtmnt order by TDprtmnt";
+	$sql= "SELECT * FROM TDprtmnt WHERE ((Trim(Chr(32) & [TDprtmnt]![DepGrop])='1')) order by TDprtmnt";
+
 	$sth = $dbh->query($sql);
 	$result = $sth->fetch(PDO::FETCH_ASSOC);
 	while ($result){
@@ -271,11 +269,13 @@ function AllWeekStatus($WFixId, $startDate, $EndDate, $dbh){
 }
 //----------------------------------------------------------------------------------------------------------
 // checks for existance of a day that contains any attendance entry within given time period
-function FindPresenceInTimePeriod($WFixId, $startDate, $EndDate, $dbh){
+function FindPresenceInTimePeriod($WFixId, $startDate, $endDate, $dbh){
 
 	$Dis = "";
+	$start = changeFormat('d/m/Y',$startDate,'Y/m/d');
+	$end = changeFormat('d/m/Y',$endDate,'Y/m/d');
     //$sql= "SELECT * FROM WorkPrsnt Where WFixID=" . $WFixId . " AND ((((DateDiff('d',#".$startDate."#,[workPrsnt]![FullDate])>=0 And DateDiff('d',[workPrsnt]![FullDate],#".$EndDate."#)>=0)=True)=True)) AND PresNumber = 1";
-	$sql= "SELECT * FROM WorkPrsnt Where WFixID=".$WFixId." AND format([workPrsnt]![FullDate],'yyyy/MM/dd')>='" .$startDate."' And format([workPrsnt]![FullDate],'yyyy/MM/dd') <= '".$EndDate. "' AND PresNumber = 1";
+	$sql= "SELECT * FROM WorkPrsnt Where WFixID=".$WFixId." AND format([workPrsnt]![FullDate],'yyyy/MM/dd')>='" .$start."' And format([workPrsnt]![FullDate],'yyyy/MM/dd') <= '".$end. "' AND PresNumber = 1";
 	$sth = $dbh->query($sql);
 	$result = $sth->fetchAll(PDO::FETCH_ASSOC);
 	$i = 0;
@@ -374,8 +374,12 @@ function getFullTime($format,$pdate) {
 }
 //-----------------------------------------------------------------------------------------------------------
 //--- $newFormat according to date() obj supported formats
-function changeFormat($format,$pdate,$newFormat) {
-	$date = DateTime::createFromFormat($format, $pdate);
+function changeFormat($dateFormat,$pdate,$newFormat) {
+	$date = DateTime::createFromFormat($dateFormat, $pdate);
+	if(!$date){
+		$dateTimeFormat = "d/m/Y H:i";
+		$date = DateTime::createFromFormat($dateTimeFormat, $pdate);
+	}
 	if ($date){
 		return $date->format($newFormat);
 	}else{
@@ -547,9 +551,9 @@ function AdvancePresNumber($result, $fNewPresNumber, $formType, $dbh){
 	if($formType == "D"){
 		$i = 0;
 		while(isset($result[$i]) AND $result[$i]['PresNumber'] < $fNewPresNumber){
-			$i++;
+			$i++; // advance to the right record in the day
 		}
-		if(isset($result[$i]) AND $result[$i]['PresNumber'] == $fNewPresNumber){
+		if(isset($result[$i]) AND $result[$i]['PresNumber'] == $fNewPresNumber AND $i > 0){//reached the record to delete AND it's NOT the only present in this day
 			$sql = "UPDATE WorkPrsnt SET PresNumber = 100 WHERE PresentID = ".$result[$i]['PresentID']." AND PresNumber = ".$fNewPresNumber;
 			$sth = $dbh->query($sql);
 			$i = $fNewPresNumber; //the line next to $fNewPresNumber line.
@@ -560,7 +564,10 @@ function AdvancePresNumber($result, $fNewPresNumber, $formType, $dbh){
 				$i++;
 			}
 			return 100; //random unreachable number is now the presNumber for the presence to be deleted
+		}else if(isset($result[$i]) AND $result[$i]['PresNumber'] == $fNewPresNumber AND $i == 0){//it's the ONLY record in the day
+			return 1; 
 		}
+		
 	}else{ // $formType = "N" = new present
 		$i = count($result)-1;
 		while(isset($result[$i]) AND $result[$i]['PresNumber'] >= $fNewPresNumber){
@@ -572,25 +579,6 @@ function AdvancePresNumber($result, $fNewPresNumber, $formType, $dbh){
 		return $fNewPresNumber;
 	}
 }
-
-
-function AdvancePresNumberOld($result, $fNewPresNumber, $dbh){
-
-	$i = 0;
-	while(isset($result[$i]) AND $result[$i]['PresNumber'] < $fNewPresNumber){
-		$i++;
-	}
-	if(isset($result[$i]) AND $result[$i]['PresNumber'] == $fNewPresNumber){
-		while(isset($result[$i])){
-			$currentPresNumber = $result[$i]['PresNumber'];
-			$sql = "UPDATE WorkPrsnt SET WorkPrsnt.PresNumber = ".($currentPresNumber+1)." WHERE (((WorkPrsnt.PresentID)= ".$result[$i]['PresentID'].") AND ((WorkPrsnt.PresNumber)= ".$currentPresNumber." ))";
-			$sth = $dbh->query($sql);
-			$i++;
-		}
-	}
-	return $fNewPresNumber;
-}
-
 
 
 

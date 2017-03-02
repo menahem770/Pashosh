@@ -149,7 +149,7 @@
 			$sql = $sql . "EndDate = ". LeftDateSep . $startDate . RightDateSep .", ";
 			$sql = $sql . "EndTime = Null, ";
 			$sql = $sql . "PresentCd = '" . $fPresentCd . "', ";
-			$sql = $sql . "NeedsCmpt =  True, ";
+			$sql = $sql . "ChangePrsnt =  True, ";
 			$sql = $sql . "TDprtmnt = Null, ";
 			$sql = $sql . "TJob = Null, ";
 			$sql = $sql . "DataSourceEnter = 'IOLVER03 " . $_SESSION['un'] . " " . $_SESSION['UserIp'] . "', ";

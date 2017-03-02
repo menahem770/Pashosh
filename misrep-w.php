@@ -26,32 +26,32 @@
 	<link href="DatePickerLibraries/jquery-ui.min.css" rel="stylesheet" type="text/css">
 	<link href="DatePickerLibraries/jquery-ui-timepicker-addon.min.css" rel="stylesheet" type="text/css">
 	<script>
-	$(function() {
-		var dateFormat = "dd/mm/yy";
-		from = $( "#fromDate" ).datepicker({
-			dateFormat: "dd/mm/yy"
-		})
-		.change(function() {
-      		to.datepicker( "option", "minDate", getDate( this ) );
-    	});
-    	
-		to = $( "#endDate" ).datepicker({
-			dateFormat: "dd/mm/yy"
-		})
-		.change(function() {
-      		from.datepicker( "option", "maxDate", getDate( this ) );
-    	});
-    	
-		function getDate( element ) {
-	        var date;
-	        try {
-	          date = $.datepicker.parseDate( dateFormat, element.value );
-	        } catch( error ) {
-	          date = null;
-	        }
-	        return date;
-	    }
-	});
+		$(function() {
+			var dateFormat = "dd/mm/yy";
+			from = $( "#fromDate" ).datepicker({
+				dateFormat: "dd/mm/yy"
+			})
+			.change(function() {
+          		to.datepicker( "option", "minDate", getDate( this ) );
+        	});
+        	
+			to = $( "#endDate" ).datepicker({
+				dateFormat: "dd/mm/yy"
+			})
+			.change(function() {
+          		from.datepicker( "option", "maxDate", getDate( this ) );
+        	});
+        	
+			function getDate( element ) {
+		        var date;
+		        try {
+		          date = $.datepicker.parseDate( dateFormat, element.value );
+		        } catch( error ) {
+		          date = null;
+		        }
+		        return date;
+		    }
+		});
 	</script>
 
 <?php

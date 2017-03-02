@@ -25,13 +25,14 @@
 		}else{
 			$_SESSION['un'] = $un;
 			$_SESSION['UWorkerNum'] = trim($result["WorkerNum"]);
-			$_SESSION['CardNumber'] = trim($result["CardNumber"]);
+			$_SESSION['UCardNumber'] = trim($result["CardNumber"]);
 			$_SESSION['UWorkerName'] = $result["LastName"]." ".$result["FirstName"];
 			$_SESSION['UWFixID'] = $result["WFixID"];
 			$_SESSION['UDepMail'] = $result["DepMail"];
 			$_SESSION['UIncldInMadan'] = $result['IncldInMaden'];
 			$_SESSION['UIncldInTmhir'] = $result['IncldInTmhir'];
 			$_SESSION['WorkerNum'] = $_SESSION['UWorkerNum'];
+			$_SESSION['CardNumber'] = $_SESSION['UCardNumber'];
 			$_SESSION['WorkerName'] = $_SESSION['UWorkerName'];
 			$_SESSION['WFixID'] = $_SESSION['UWFixID'];
 			$_SESSION['DepMail'] = $_SESSION['UDepMail'];

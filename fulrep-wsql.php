@@ -39,7 +39,7 @@
 		$fInputOrder = " ";
 		$fPresentID = $_POST['PresentID'];
 		$accDate = $_POST['accDate'];
-		$fRegistrationDate = changeFormat("d/m/Y H:i:s",$accDate,"Y/m/d H:i:s");
+		$fRegistrationDate = changeFormat("d/m/Y H:i:s",$accDate,"Y/m/d H:i");
 		$fFullDateForSort = $formatEnterDate." ".$fEnterTime;
 		$formType = $_POST['FormType'];
 		$fYear = getYear("d/m/Y",$fEnterDate);
@@ -73,7 +73,7 @@
 			$resultCount = count($result);
 		}
 		$fDayOfWeek = GetHebrewDayInWeek($formatEnterDate);
-		
+
 		$fOriginalPresentID = $_POST['OriginalPresentID'];
 		$fOriginalTransacionId = $_POST['OriginalTransacionId'];
 		$fClockType = "Internet";
@@ -204,7 +204,7 @@
 			$sql = $sql . "EndDate = ". Iif(empty($fExitDate),'Null',LeftDateSep .$fExitDate. RightDateSep)  .", ";
 			$sql = $sql . "EndTime = ". Iif(empty($fExitTime),'Null',LeftDateSep .$fExitTime. RightDateSep)  .", ";
 			$sql = $sql . "PresentCd = '" . $fPresentCd . "', ";
-			$sql = $sql . "NeedsCmpt =  True, ";
+			$sql = $sql . "ChangePrsnt =  True, ";
 			$sql = $sql . "TDprtmnt = " . Iif(empty($fTDprtmnt),'Null',"'" . $fTDprtmnt . "'")  . ",";
 			$sql = $sql . "TJob = ". Iif(empty($fTjob),'Null',"'" . $fTjob . "'")  . ",";
 			$sql = $sql . "DataSourceEnter = 'IOLVER03 " . $_SESSION['un'] . " " . $_SESSION['UserIp'] . "', ";
@@ -231,7 +231,7 @@
 			$sql = $sql . "EndDate,";
 			$sql = $sql . "EndTime,";
 			$sql = $sql . "PresentCd,";
-			$sql = $sql . "NeedsCmpt,";
+			$sql = $sql . "ChangePrsnt,";
 			$sql = $sql . "TDprtmnt,";
 			$sql = $sql . "TJob,";
 			$sql = $sql . "DataSourceEnter,";
@@ -268,7 +268,7 @@
 			$sql = $sql . "'"  . $fDocumentFileFullPathName . "'" . ")";
 
 		}else if($formType == "D"){ //deleting present
-			
+
 			if($resultCount == 1){
 				//in case of single presente in current day
 				$sql = "UPDATE WorkPrsnt SET ";
@@ -277,7 +277,7 @@
 				$sql = $sql . "EndDate = Null, ";
 				$sql = $sql . "EndTime = Null, ";
 				$sql = $sql . "PresentCd = Null, ";
-				$sql = $sql . "NeedsCmpt =  True, ";
+				$sql = $sql . "ChangePrsnt =  True, ";
 				$sql = $sql . "TDprtmnt = Null, ";
 				$sql = $sql . "TJob = Null, ";
 				$sql = $sql . "DataSourceEnter = Null, ";
@@ -290,18 +290,23 @@
 				// more then 1 present in current day
 				$sql = "DELETE WorkPrsnt.* ";
 				$sql = $sql . "FROM WorkPrsnt ";
-				$sql = $sql . "WHERE WFixID = " . $fWFixID . "  AND Year = '" . $fYear . "' AND Month = '" . $fMonth . "'  AND DayNumber = '" . $fDay . "' AND PresNumber = " . $fPresNumber . " ";
+				$sql = $sql . "WHERE WFixID = " . $fWFixID . "  AND Year = '" . $fYear . "' AND Month = '" . $fMonth . "'  AND DayNumber = '" . $fDay . "' AND PresNumber = " . $fPresNumber;
 			}
 		}
-
+		
 		echo $vbCrLf . "<!--" . $sql . "-->" . $vbCrLf;
 		$sth = $dbh->query($sql);
+		if(!$sth) {
+			$error = var_export($dbh->errorinfo(),true);
+			$date = new DateTime();
+			file_put_contents('PDOErrors.txt', $date->format('d/m/Y H:i')." ".$error.PHP_EOL, FILE_APPEND);
+		}
 
 		echo "<!--" . $tempTargetFile . "-->";
 		echo "<!--" . $fDocumentFileFullPathName . "-->";
 		$dbh = null;
 		$sth = null;
-		
+
 	?>
 	<script>
 		window.opener.location.reload();

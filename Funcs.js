@@ -1,5 +1,4 @@
 
-
 function open_close_group(rowID){
 
 //  alert (rowID);
@@ -269,8 +268,8 @@ function WeeksPageRefreshOrCheat(param,formType,EnterDate,fTDprtmnt,fPresentCd,f
 			cell2.innerHTML = "";
 			cell3.innerHTML = fExitTime;
 			cell4.innerHTML = fEnterTime;
-			cell5.innerHTML = "<input type=button value='òãëåï' disabled style='cursor: pointer;'>";
-			cell6.innerHTML = "<input type=button value='çãù' disabled style='cursor: pointer;'>";
+			cell5.innerHTML = "<input type=button value='ï¿½ï¿½ï¿½ï¿½ï¿½' disabled style='cursor: pointer;'>";
+			cell6.innerHTML = "<input type=button value='ï¿½ï¿½ï¿½' disabled style='cursor: pointer;'>";
 		}else if (formType == "U"){
 			var table = window.opener.document.getElementById(EnterDate).rows;
 			var row = table[fPresNumber-1].cells;

@@ -51,8 +51,8 @@
 		header("Location: NotlogedIn.php");
 		exit();
 	}
-
-	$WorkerNum = $_SESSION['WorkerNum'];
+	
+ 	$WorkerNum = $_SESSION['WorkerNum'];
 	$WorkerName = $_SESSION['WorkerName'];
 	$WFixID = $_SESSION['WFixID'];
 	$PresentID = $_GET['PresentID'];

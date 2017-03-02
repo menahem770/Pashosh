@@ -117,10 +117,10 @@
 	}
 
 	$formatDate = $fromDateParam->format('Y/m/d');
-	// this sql statement is equal to: "SELECT * FROM WorkPrsnt WHERE WFixID = ".$WFixID." AND FullDate = #".$shortdate."#", but keeps from dates converting problems
+	//this sql statement is equal to: "SELECT * FROM WorkPrsnt WHERE WFixID = ".$WFixID." AND FullDate = #".$shortdate."#", but keeps from dates converting problems
 	//$sql = "SELECT * FROM WorkPrsnt WHERE WFixID = ".$WFixID." AND (DateDiff('d',#".$formatDate."#,[workPrsnt]![FullDate])=0)";
 	$sql = "SELECT WorkPrsnt.* FROM WorkPrsnt WHERE (((WorkPrsnt.WFixID)= ".$WFixID.") AND ((Format([WorkPrsnt]![FullDate],'yyyy/mm/dd'))= '".$formatDate."')) ORDER BY WorkPrsnt.PresNumber";
-	echo $vbCrLf . "<!--" . $sql . "-->" . $vbCrLf;
+	echo "<!--" . $sql . "-->";
 	$sth = $dbh->query($sql);
 	$result = $sth->fetchAll(PDO::FETCH_ASSOC);
 	$NewPresNumber = LegalPresence($result, $formType, $PresNumber, $fromDate, $fromTime, $endDate, $endTime);

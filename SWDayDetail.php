@@ -3,21 +3,21 @@
 		<table id="<?=date("d/m/Y",strtotime($result1[$j]["LastOfDate"]))?>" CLASS="prsnt">
 
 			<?php
-				
+
 				$sum = ' :סה"כ ';
 				$enter = ' :כ ';
 				$exit = ' :י ';
 				$currentDayNumInYear = $result2[$k]['DayNumberInYear'];
-				
+
 				$x = $k;
 				$count = 0; //to count number of presents for this day. for the 'new' button ID field
 				while (isset($result2[$x]) AND $result2[$x]['DayNumberInYear'] == $currentDayNumInYear){
 					$count++;
 					$x++;
 				}
-				
+
 				while (isset($result2[$k]) AND $result2[$k]['DayNumberInYear'] == $currentDayNumInYear){
-						
+
 					$FullDate = changeFormat("Y/m/d",$result2[$k]["FullDate"],"m/Y");
 					$lastMonth = date("m/Y",strtotime('first day of previous month'));
 					$DataSourceEnter = $result2[$k]['DataSourceEnter'];
@@ -42,49 +42,49 @@
 					if((!$_SESSION['ini_array']['EnableClockTransEditing']) AND 
 					  ((substr($DataSourceEnter,0,5) == "SB100" AND substr($DataSourceExit,0,5) == "SB100") OR (substr($DataSourceEnter,0,5) == "Synel" AND substr($DataSourceExit,0,5) == "Synel")))
 						{ $EnableUpdateRecord = " Disabled "; }
-					
+
 					$fCurrFile = $result2[$k]['DocumentFileFullPatName'];
-					
+
 					$style = "";
 					if($result2[$k]['PresentCd'] != "רגילה" AND $result2[$k]['PresentCd'] != "ללא דווח"){
 						$style = "background-color:burlywood; color:red;";
 					}
-					
+
 			?>
 
 			<tr id="<?=$result2[$k]['FullDate'].'_'.$result2[$k]['PresNumber']?>" style="background-color: rgba(114, 106, 144, 0.38);">
-			
+
 				<td style="width:95px;">
 					<?=$result2[$k]['TDprtmnt']?>
 				</td>
-	
+
 				<td style="width:105px; <?=$style?>">
 					<?=$result2[$k]['PresentCd']?>
 				</td>
-	
+
 				<td style="text-align:right; padding-right:5px; width:90px;">
 					<?=MisparTimeFormat($result2[$k]['length']).$sum?>
 				</td>
-	
+
 				<td style="text-align:right; padding-right:5px; width:65px;">
 					<?=$result2[$k]['EndTime'].$exit?>
 				</td>
-	
+
 				<td style="text-align:right; padding-right:5px; width:65px;">
 					<?=$result2[$k]['StartTime'].$enter?>
 				</td>
-	
+
 				<td style="width:30px;">
 					<input type=button value=עדכון <?=$EnableUpdateRecord?> style="cursor: pointer;" ONCLICK='openUpdW("fulrep-w.php",<?=$result2[$k]['PresentID']?>,"<?=trim($result['WeekStatus'])?>","<?=$result2[$k]['FullDate']?>","<?=$fCurrFile?>")'>
 				</td>
-	
+
 				<td style="width:30px;">
 					<input class="buttons<?=$result['WeekNumberInYear']?>" id="<?=$count?>" type=button value=חדש <?=$EnableNewRecord?> style="cursor: pointer;" ONCLICK='openUpdW("fulnew-w.php",<?=$result2[$k]['PresentID']?>,"<?=trim($result['WeekStatus'])?>","<?=$result2[$k]['FullDate']?>")'>
 				</td>
-			
+
 			</tr>
-			
-			
+
+
 			<?php
 					$k++;
 				}

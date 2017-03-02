@@ -42,10 +42,10 @@
 				minDate: a,
 				maxDate: b,
 				hour: 17
-			});	
+			});
 		});
 	</script>
-	
+
 <?php
 	if (empty($_SESSION['un'])){
 		header("Location: NotlogedIn.php");
@@ -57,7 +57,7 @@
 	$PresentID = $_GET['PresentID'];
 	$FullDate = changeFormat("Y/m/d",$_GET['FullDate'],"d/m/Y");
 	$WeekStatus = strtoupper($_GET['WeekS']);
-	
+
 	$sql= "SELECT * FROM SelectWorkerPresentWithMadanVer03 WHERE PresentID = " . $PresentID;
 	echo "<!-- " . $sql . " -->" . $vbCrLf;
 	$sth = $dbh->query($sql);
@@ -90,7 +90,7 @@
 	if ($tamhir == true){
 		$strJobs = BuildJobSList($result['TJob'],$dbh);
 	}
-	
+
 	$PresentCd = trim($result['PresentCd']);
 	$strSugeiNochechut = BuildSugeiNochechutList($PresentCd,$dbh);
 
@@ -98,7 +98,7 @@
 	if(!empty($ExistingCurrFile)){
 		$ExistingCurrFile = "../".$ExistingCurrFile; //files in DB are regisered as if PHP placed Directly in wwwroot. this is a correction to the path.
 	}
-	
+
 	$thisDate = changeFormat("d/m/Y",$FullDate,"m/Y");
 	$lastMonth = date("m/Y",strtotime('first day of previous month')); //for the following condition
 	
@@ -126,11 +126,11 @@
 	  	(substr($DataSourceExit,0,9) == "Manually,") OR
 	  	($EnableUpdate == " DISABLED ")))
 			{ $EnableExit = " DISABLED "; }
-	
+
 	if ($PresentID == 0 OR (empty($result['StartDate']) AND empty($result['EndDate']))){
 		$dis = " DISABLED ";
 	}
-	
+
 	if($PresentCd == "חופשה"){
 		$required = "";
 	}
@@ -150,7 +150,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>	
+			<tr>
 				<td style="vertical-align:top;">
 					<table style="text-align:right; padding:2; border:0;">
 						<tr>
