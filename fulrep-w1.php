@@ -55,7 +55,7 @@
 	$fitMadanRequirements = true;
 	$fromDateParam = DateTime::createFromFormat('d/m/Y H:i', $fromDate.$fromTime); //DateTime object
 	$endDateParam = DateTime::createFromFormat('d/m/Y H:i', $endDate.$endTime); //DateTime object
-	if($_SESSION['IncldInMadan']){
+	if($_SESSION['IncldInMadan'] AND !empty($endDateParam) AND !empty($fromDateParam)){ // check in case one of the date is empty or null before date_diff
 		$origAccDate = new DateTime(); 
 		$isTodaySunday = $origAccDate->format('%w') == 0; // 0 is sunday
 		$diffFromDate = date_diff($fromDateParam, $origAccDate)->format('%d%r'); //diff from origAccDate to fromDate
@@ -101,7 +101,7 @@
 		if ($fromDate == "" or $fromTime == ""){
 			$ErrorTitle = 1;
 		}
-		if (isset($_POST['endDate'])){
+		if (!empty($endDateParam) AND !empty($fromDateParam)){
 			$presentLengthInHoures = date_diff($fromDateParam, $endDateParam)->format('%h%r');
 			if($_SESSION['attendMaxLength'] != "&" AND $presentLengthInHoures >= $_SESSION['attendMaxLength']){
 				$ErrorTitle = 2;
