@@ -26,11 +26,41 @@
 	<link href="css/login.css" rel="stylesheet" type="text/css">
 	<link href="DatePickerLibraries/jquery-ui.min.css" rel="stylesheet" type="text/css">
 	<link href="DatePickerLibraries/jquery-ui-timepicker-addon.min.css" rel="stylesheet" type="text/css">
-	<script>
+	<script type="text/javascript">
 		var param1var = getQueryVariable("FullDate",2);
 		var a = new Date(param1var);
 		var b = new Date(param1var);
 		b.setDate(b.getDate()+2);
+		var madan = searchQueryVariable('Madan') === 1;	
+		$(document).submit(function(event){
+	    	var fromTime = new Date($("#fromTime").datetimepicker("getDate"));
+	    	var from = new Date(a.getFullYear(),a.getMonth(),a.getDate(),fromTime.getHours(),fromTime.getMinutes())
+	        var to = new Date($("#endDate").datetimepicker("getDate"));
+	    	var now = new Date();
+	    	var prevBusinessDay = getYesterdayMidnight(now)
+	        if(from && $("#fromTime").val() != ""){
+	        	if(from > now){
+		        	alert("אין לדווח דיווח עתידי");
+		        	event.preventDefault();
+		        	return;
+	        	}
+	        	if(madan && prevBusinessDay > from)
+					alert("על פי הוראות המדען, יש להימנע מדיווח רטרואקטיבי!");
+		        if(to && $("#endDate").val() != ""){
+			        var message = "";
+			        if(to > now)
+			        	message = "אין לדווח דיווח עתידי";
+			        else if(to < from)
+			        	message = "יציאה מוקדמת מכניסה";
+			        if(message != ""){
+				        alert(message);
+				        event.preventDefault();
+			        }
+	        	}
+			}
+	        else
+	        	event.preventDefault();
+		});
 		$(function() {
 			$( "#fromTime" ).timepicker({
 				hour: 8
@@ -43,7 +73,7 @@
 				maxDate: b,
 				hour: 17
 			});
-		});
+		});			
 	</script>
 	
 <?php
@@ -72,8 +102,7 @@
 	if($_SESSION['IncldInTmhir']){$strJobs = BuildJobSList(" ",$dbh);}
 	$PresentCd =  "רגילה";
 	$strSugeiNochechut = BuildSugeiNochechutList($PresentCd,$dbh);
-	//this file was included. seems expandable.
-	//include 'depNjobList.php';
+
 	$dbh = null;
 	$sth = null;
 ?>
@@ -153,8 +182,8 @@
 						</tr>
 						<tr>
 							<td colspan=2 style="text-align: center;">
-								<input type="Submit" name="submit" value="אישור" style="width: 100px;">
-								<input type="Submit" name="cancel" value="חזרה" style="width: 100px;" OnClick="window.close();return false;">
+								<input type="Submit" name="submit" id="submit" value="אישור" style="width: 100px;">
+								<input type="Button" name="cancel" value="חזרה" style="width: 100px;" OnClick="window.close();return false;">
 								<input type="HIDDEN" name="PresentID" value="<?=$PresentID?>">
 								<input type="HIDDEN" name="OriginalPresentID" value="<?=$OriginalPresentID?>">
 								<input type="HIDDEN" name="OriginalTransacionId" value="<?=$OriginalTransacionId?>">

@@ -51,23 +51,6 @@
 		$endTime = $_POST['endTime1'];
 	}
 	
-	// checking for 'madan' requirements - not completed
-	$fitMadanRequirements = true;
-	$fromDateParam = DateTime::createFromFormat('d/m/Y H:i', $fromDate.$fromTime); //DateTime object
-	$endDateParam = DateTime::createFromFormat('d/m/Y H:i', $endDate.$endTime); //DateTime object
-	if($_SESSION['IncldInMadan'] AND !empty($endDateParam) AND !empty($fromDateParam)){ // check in case one of the date is empty or null before date_diff
-		$origAccDate = new DateTime(); 
-		$isTodaySunday = $origAccDate->format('%w') == 0; // 0 is sunday
-		$diffFromDate = date_diff($fromDateParam, $origAccDate)->format('%d%r'); //diff from origAccDate to fromDate
-		$diffEndDate = date_diff($endDateParam, $origAccDate)->format('%d%r'); //diff from origAccDate to endDate
-	
-		if((!$isTodaySunday AND ($diffFromDate > 1 OR $diffEndDate > 1)) OR ($isTodaySunday AND ($diffFromDate > 3 OR $diffEndDate > 3))){
-			$fitMadanRequirements = false;
-		}
-		// else if($difffromdate < 0 or $diffenddate < 0){		
-		// }
-	}
-	
 	$SugeiNochechut = $_POST['strSugeiNochechutDtl'];
 	$fActionCode = GetActionCode($SugeiNochechut,$dbh);
 
@@ -96,7 +79,10 @@
 			$formType = "D";
 		}
 	}
+	
 	$ErrorTitle = "";
+	$fromDateParam = DateTime::createFromFormat('d/m/Y H:i', $fromDate.$fromTime); //DateTime object
+	$endDateParam = DateTime::createFromFormat('d/m/Y H:i', $endDate.$endTime); //DateTime object
 	if ($fActionCode != "העדרות"){
 		if ($fromDate == "" or $fromTime == ""){
 			$ErrorTitle = 1;
@@ -275,11 +261,6 @@
 								<input type="HIDDEN" name="NewPresNumber" value="<?=$NewPresNumber?>">
 							</td>
 						</tr>
-						<?php if(!$fitMadanRequirements):?>
-							<tr>
-								<td colspan=2>שים לב! ע"פ הוראות המדען יש לימנע מהכנסת או עדכון נוכחות שקודמת ליום עבודה הקודם</td>
-							</tr>
-						<?php endif?>
 						<tr>
 							<td colspan = 2 style="text-align: center;">
 								<?php if($ErrorTitle != 0): ?>

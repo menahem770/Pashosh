@@ -72,9 +72,9 @@ function ShowDisplay(oItems) {
 }
 
 
-function openUpdW(page,Prs,WeekS,Dt,CurrFile) {
+function openUpdW(page,Prs,WeekS,Dt,Madan,CurrFile) {
     msgWindow = window.open("","UpdWin","resizable=no,scrollbars=yes,Status=yes,width=500,height=500,top=50,left=200");
-    msgWindow.location.href = page+'?PresentID='+Prs+'&WeekS='+WeekS+'&FullDate='+Dt+'&CurrFile='+CurrFile;
+    msgWindow.location.href = page+'?PresentID='+Prs+'&WeekS='+WeekS+'&FullDate='+Dt+'&Madan='+Madan+'&CurrFile='+CurrFile;
     msgWindow.creator=self
 }
 
@@ -247,7 +247,15 @@ function getQueryVariable(variable, loc) {
 	alert('Query Variable ' + variable + ' not found');
 }
 
-
+function getYesterdayMidnight(now) {
+	var prevBusinessDay = new Date(now.getTime());
+	if(now.getDay() === 0) // sunday
+		prevBusinessDay.setDate(now.getDate() - 3); // thursday
+	else
+		prevBusinessDay.setDate(now.getDate() - 1);
+	prevBusinessDay.setHours(0,0,0,0);
+	return prevBusinessDay;	 
+}
 
 function WeeksPageRefreshOrCheat(param,formType,EnterDate,fTDprtmnt,fPresentCd,fEnterTime,fExitTime,fPresNumber,fNewPresNumber){
 	if(param == 1){

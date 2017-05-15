@@ -1,6 +1,6 @@
 <?PHP
 
-$vbCrLf = Chr(13) & Chr(10);
+$vbCrLf = "\n";
 
 //---------------------------------------------------
 // create connection to MDB file.

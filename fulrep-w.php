@@ -2,11 +2,11 @@
 <?php
 	session_start();
 	header('Content-Type: text/html; charset=CP1255');
-	
+
 	ob_start();
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
-	
+
 	include 'DBConect.php';
 	include 'Funcs.php';
 ?>
@@ -31,6 +31,36 @@
 		var a = new Date(param1var);
 		var b = new Date(param1var);
 		b.setDate(b.getDate()+2);
+		var madan = searchQueryVariable('Madan') === 1;	
+		$(document).submit(function(event){
+	    	var fromTime = new Date($("#fromTime").datetimepicker("getDate"));
+	    	var from = new Date(a.getFullYear(),a.getMonth(),a.getDate(),fromTime.getHours(),fromTime.getMinutes())
+	        var to = new Date($("#endDate").datetimepicker("getDate"));
+	    	var now = new Date();
+	    	var prevBusinessDay = getYesterdayMidnight(now)
+	        if(from && $("#fromTime").val() != ""){
+	        	if(from > now){
+		        	alert("אין לדווח דיווח עתידי");
+		        	event.preventDefault();
+		        	return;
+	        	}
+	        	if(madan && prevBusinessDay > from)
+					alert("על פי הוראות המדען, יש להימנע מדיווח רטרואקטיבי!");
+		        if(to && $("#endDate").val() != ""){
+			        var message = "";
+			        if(to > now)
+			        	message = "אין לדווח דיווח עתידי";
+			        else if(to < from)
+			        	message = "יציאה מוקדמת מכניסה";
+			        if(message != ""){
+				        alert(message);
+				        event.preventDefault();
+			        }
+	        	}
+			}
+	        else
+	        	event.preventDefault();
+		});
 		$(function() {
 			$( "#fromTime" ).timepicker({
 				hour: 8
@@ -45,7 +75,6 @@
 			});
 		});
 	</script>
-
 <?php
 	if (empty($_SESSION['un'])){
 		header("Location: NotlogedIn.php");
@@ -59,7 +88,7 @@
 	$WeekStatus = strtoupper($_GET['WeekS']);
 
 	$sql= "SELECT * FROM SelectWorkerPresentWithMadanVer03 WHERE PresentID = " . $PresentID;
-	echo "<!-- " . $sql . " -->" . $vbCrLf;
+	echo $vbCrLf . "<!-- " . $sql . " -->" . $vbCrLf;
 	$sth = $dbh->query($sql);
 	$result = $sth->fetch(PDO::FETCH_ASSOC);
 	if (empty($result)){
@@ -94,30 +123,29 @@
 	$PresentCd = trim($result['PresentCd']);
 	$strSugeiNochechut = BuildSugeiNochechutList($PresentCd,$dbh);
 
-	$ExistingCurrFile = $result['DocumentFileFullPatName'];
-	if(!empty($ExistingCurrFile)){
-		$ExistingCurrFile = "../".$ExistingCurrFile; //files in DB are regisered as if PHP placed Directly in wwwroot. this is a correction to the path.
-	}
-
+	$ExistingCurrFile = "";
+	if(!empty($ExistingCurrFile))
+		$ExistingCurrFile = $_SESSION['ini_array']['UserFolder'].$result['DocumentFileFullPatName'];
 	$thisDate = changeFormat("d/m/Y",$FullDate,"m/Y");
 	$lastMonth = date("m/Y",strtotime('first day of previous month')); //for the following condition
-	
+
 	$EnableEnter = "";
 	$EnableExit = "";
 	$EnableUpdate = "";
 	$dis = "";
 	$required = "required";
-	
+
 	if ($result['WeekStatus'] != "O" OR
 		(($thisDate == date("m/Y")) AND ($ManualUpdatesNumber >= $_SESSION['NumberOfManualChangesIOL'])) OR
 		(($thisDate == $lastMonth) AND ($result['ManualUpdatesNumberPM'] >= $_SESSION['NumberOfManualChangesIOL'])))
 			{ $EnableUpdate = " DISABLED "; }
 	if ((!$_SESSION['ini_array']['EnableManagerReporting']) AND ($_SESSION['UWFixID'] != $_SESSION['WFixID']))
 			{ $EnableUpdate = " DISABLED "; }
-	if((!$_SESSION['ini_array']['EnableClockTransEditing']) AND 
-	  	((substr($DataSourceEnter,0,5) == "SB100") OR 
-  		(substr($DataSourceEnter,0,5) == "Synel") OR 
-	  	(substr($DataSourceEnter,0,9) == "Manually,") OR 
+
+	if((!$_SESSION['ini_array']['EnableClockTransEditing']) AND
+	  	((substr($DataSourceEnter,0,5) == "SB100") OR
+  		(substr($DataSourceEnter,0,5) == "Synel") OR
+	  	(substr($DataSourceEnter,0,9) == "Manually,") OR
 	  	($EnableUpdate == " DISABLED ")))
 			{ $EnableEnter = " DISABLED "; }
 	if((!$_SESSION['ini_array']['EnableClockTransEditing']) AND
@@ -140,7 +168,7 @@
 ?>
 </head>
 <body CLASS="popup-background">
-	<form name=calform action="fulrep-w1.php" method="post" enctype="multipart/form-data" onsubmit="return Form_Validator(this)">
+	<form name=calform action="fulrep-w1.php" method="post" enctype="multipart/form-data">
 		<table CLASS=iniFile dir=rtl>
 			<tr>
 				<td style="vertical-align:top;">

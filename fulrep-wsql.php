@@ -2,11 +2,11 @@
 <?php
 	session_start();
 	header('Content-Type: text/html; charset=CP1255');
-	
+
 	ob_start();
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
-	
+
 	include 'DBConect.php';
 	include 'Funcs.php';
 ?>
@@ -89,7 +89,7 @@
 		$fDocumentFileFullPathName = $_POST['ExistingCurrFile'];
 		if ($tempTargetFile != ""){
 			$uploadOk = 1;
-			$target_dir = $_SESSION['ini_array']['UserFolder'].$_SESSION['WorkerNum']."/".changeFormat('d/m/Y',$fEnterDate,'Ymd');
+			$target_dir = $_SESSION['ini_array']['UserFolder']."Docs/".$_SESSION['WorkerNum']."/".changeFormat('d/m/Y',$fEnterDate,'Ymd');
 			// creating folder
 			if (!is_dir($target_dir) AND !mkdir($target_dir,null,true)){
 				unlink($tempTargetFile);
@@ -123,7 +123,8 @@
 			}
 			include 'sendEmail.php';
 		}
-		$fDocumentFileFullPathName = str_ireplace("../","",$fDocumentFileFullPathName);//to register the right path to the attached file in the DB, as if PHP is placed directly in wwwroot.
+
+		//$fDocumentFileFullPathName = str_ireplace("../","",$fDocumentFileFullPathName);//to register the right path to the attached file in the DB, as if PHP is placed directly in wwwroot.
 
 		$sql = "INSERT into ClockTransNew (";
 		$sql = $sql . "CardNumber,";
@@ -190,7 +191,9 @@
 		$sql = $sql . "'" . $formatEnterDate . "'" . ",";
 		$sql = $sql . "'" . "Online" . "'" . ",";
 		$sql = $sql . $fOriginalPresentID . ",";
-		$sql = $sql . "'"  . $fDocumentFileFullPathName . "'" .  ",";
+		//$sql = $sql . "'"  . $fDocumentFileFullPathName . "'" .  ",";
+		$sql = $sql . "'"  . "Docs/".$_SESSION['WorkerNum']."/".changeFormat('d/m/Y',$fEnterDate,'Ymd')."/". $_POST['CurrFileName'] . "'" .  ",";
+
 		$sql = $sql . $fOriginalTransacionId . ")";
 
 		echo $vbCrLf . "<!--" . $sql . "-->" . $vbCrLf;
@@ -211,7 +214,9 @@
 			$sql = $sql . "DataSourceExit = 'IOLVER03 " . $_SESSION['un'] . " " . $_SESSION['UserIp'] . "', ";
 			$sql = $sql . "RegistrationEnterDate = ". LeftDateSep  . $fRegistrationDate . sRightDateSep . ", ";
 			$sql = $sql . "RegistrationExitDate = ". LeftDateSep  . $fRegistrationDate . sRightDateSep . ", ";
-			$sql = $sql . "DocumentFileFullPatName = '"  . $fDocumentFileFullPathName . "' ";
+			//$sql = $sql . "DocumentFileFullPatName = '"  . $fDocumentFileFullPathName . "' ";
+			$sql = $sql . "DocumentFileFullPatName = '"  . "Docs/".$_SESSION['WorkerNum']."/".changeFormat('d/m/Y',$fEnterDate,'Ymd')."/". $_POST['CurrFileName'] . "' ";
+
 			$sql = $sql . "WHERE WFixID = " . $fWFixID . "  AND Year = '" . $fYear . "' AND Month = '" . $fMonth . "'  AND DayNumber = '" . $fDay . "' AND PresNumber = " . $fPresNumber . " ";
 
 		}else if($formType == "N"){ // new present
@@ -265,7 +270,9 @@
 			$sql = $sql . LeftDateSep  . $fRegistrationDate . sRightDateSep . ",";
 			$sql = $sql . LeftDateSep  . $fRegistrationDate . sRightDateSep . ",";
 			$sql = $sql . "Null " . ",";//InternetOnlineRemark
-			$sql = $sql . "'"  . $fDocumentFileFullPathName . "'" . ")";
+			//$sql = $sql . "'"  . $fDocumentFileFullPathName . "'" . ")";
+			$sql = $sql . "'"  . "Docs/".$_SESSION['WorkerNum']."/".changeFormat('d/m/Y',$fEnterDate,'Ymd')."/". $_POST['CurrFileName'] . "'" . ")";
+
 
 		}else if($formType == "D"){ //deleting present
 
@@ -293,7 +300,7 @@
 				$sql = $sql . "WHERE WFixID = " . $fWFixID . "  AND Year = '" . $fYear . "' AND Month = '" . $fMonth . "'  AND DayNumber = '" . $fDay . "' AND PresNumber = " . $fPresNumber;
 			}
 		}
-		
+
 		echo $vbCrLf . "<!--" . $sql . "-->" . $vbCrLf;
 		$sth = $dbh->query($sql);
 		if(!$sth) {

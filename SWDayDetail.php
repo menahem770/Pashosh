@@ -75,11 +75,11 @@
 				</td>
 
 				<td style="width:30px;">
-					<input type=button value=עדכון <?=$EnableUpdateRecord?> style="cursor: pointer;" ONCLICK='openUpdW("fulrep-w.php",<?=$result2[$k]['PresentID']?>,"<?=trim($result['WeekStatus'])?>","<?=$result2[$k]['FullDate']?>","<?=$fCurrFile?>")'>
+					<input type=button value=עדכון <?=$EnableUpdateRecord?> style="cursor: pointer;" ONCLICK='openUpdW("fulrep-w.php",<?=$result2[$k]['PresentID']?>,"<?=trim($result['WeekStatus'])?>","<?=$result2[$k]['FullDate']?>","<?=$_SESSION['IncldInMadan']?>","<?=$fCurrFile?>")'>
 				</td>
 
 				<td style="width:30px;">
-					<input class="buttons<?=$result['WeekNumberInYear']?>" id="<?=$count?>" type=button value=חדש <?=$EnableNewRecord?> style="cursor: pointer;" ONCLICK='openUpdW("fulnew-w.php",<?=$result2[$k]['PresentID']?>,"<?=trim($result['WeekStatus'])?>","<?=$result2[$k]['FullDate']?>")'>
+					<input class="buttons<?=$result['WeekNumberInYear']?>" id="<?=$count?>" type=button value=חדש <?=$EnableNewRecord?> style="cursor: pointer;" ONCLICK='openUpdW("fulnew-w.php",<?=$result2[$k]['PresentID']?>,"<?=trim($result['WeekStatus'])?>","<?=$result2[$k]['FullDate']?>","<?=$_SESSION['IncldInMadan']?>")'>
 				</td>
 
 			</tr>

@@ -55,12 +55,6 @@
 									</td>
 									<td>:סיסמה</td>
 								</tr>
-								<tr>
-									<td>
-										<input style="float:right;margin-bottom:8px" type="CheckBox" name="ck" checked>
-									</td>
-									<td>?זכור אותי</td>
-								</tr>
 							</table>
 							<input name="submit" type="submit" size="100%" value=" כניסה ">
 							<span><?=$error?></span>
